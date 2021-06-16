@@ -78,3 +78,89 @@ Endpoint 1:
   Server Certificate: [no certificate]
 
 ```
+
+
+# 一个OPC UA监控的case
+
+1. OPC UA Server 服务器
+1. OPC UA Client 客户端
+1. 一个数据库
+1. OPC UA到数据库 
+1. 展示dashboard
+1. 预测模型
+1. 信息发送
+
+### OPC 服务器
+
+cd opc-ua-temperature-server
+
+temperature-opcua-server.py
+
+
+
+### OPC Client
+
+cd opc-ua-temperature-client
+
+temperature-opcua-client.py
+
+
+--- 
+###  DB
+
+使用MongoDB作为一个例子，使用docker的版本
+
+> docker search mongodb
+
+下载最新的版本
+> docker pull mongo:latest
+
+看一下是否拿到了
+> docker ps
+
+开始运行
+> docker run -itd --name mongo -p 27017:27017 mongo
+
+查看运行状态
+> docker ps
+
+进入并且配置一下账号密码
+docker exec -it mongo mongo admin
+
+> db.createUser({ user:'admin',pwd:'IoTadmin!',roles:[ { role:'userAdminAnyDatabase', db: 'admin'},"readWriteAnyDatabase"]});
+Successfully added user: {
+        "user" : "admin",
+        "roles" : [
+                {
+                        "role" : "userAdminAnyDatabase",
+                        "db" : "admin"
+                },
+                "readWriteAnyDatabase"
+        ]
+}
+
+> db.auth('admin','IoTadmin!')
+1
+
+
+### Mongo DB的使用
+
+
+
+### 模型
+
+规则建立的模型是最常见的
+建立一个规则的部分
+1. 获取历史数据
+1. 特征提取（optional）
+1. 分析历史数据找到区分OK/NOK的规则
+1. 追溯历史数据进行影响的确认
+1. 应用规则
+
+应用规则的部分
+1. 提醒
+1. 需要可查看
+1. 可以修改
+
+
+### 

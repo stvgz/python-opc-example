@@ -6,7 +6,9 @@ from opcua import Server
 from random import randint
 import datetime
 import time
+from time import sleep
 
+from opcua import Server
 
 server = Server()
 
@@ -28,19 +30,23 @@ Temp.set_writable()
 Press.set_writable()
 Time.set_writable()
 
-server.start()
-print("Server started at {}".format(url))
 
-while True:
-    Temperature = randint(10,50)
-    Pressure = randint(200, 999)
-    TIME = datetime.datetime.now()
+if __name__ == '__main__':
 
-    print(Temperature, Pressure, TIME)
+    server.start()
+    print("Server started at {}".format(url))
 
-    Temp.set_value(Temperature)
-    Press.set_value(Pressure)
+    while True:
+        
+        temperature = randint(-10,50)
+        pressure = 1000 + randint(0, 100)
+        time = datetime.datetime.now()
 
-    Time.set_value(TIME)
+        print(temperature, pressure, time)
 
-    time.sleep(0.1)
+        Temp.set_value(temperature)
+        Press.set_value(pressure)
+        Time.set_value(time)
+
+        sleep(1)
+
