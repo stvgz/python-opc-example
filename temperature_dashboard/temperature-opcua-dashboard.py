@@ -47,8 +47,8 @@ def update(n):
     fig = go.Figure()
     
     # get information from opc directly or db, most recent value
-    time_start  = datetime.datetime.now() - datetime.timedelta(hours=1)
-
+    time_start  = datetime.datetime.now() - datetime.timedelta(hours=24)
+    
     query  = {
         "timestamp":{
             "$gte": time_start
@@ -57,6 +57,10 @@ def update(n):
 
     r = col_temperature.find(query)
     df = pd.DataFrame([v for v in r])
+
+    # limit to last 200 points
+    df=df.tail(100)
+
 
     fig.add_trace(go.Scatter(
                         x=df['timestamp'],
