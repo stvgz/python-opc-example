@@ -49,10 +49,10 @@ col_temperature = db['temperature']
 @app.callback(
     [
         Output('temperature','figure'),
-        Output('table','columns'),
-        Output('table','data')
+        # Output('table','columns'),
+        # Output('table','data')
     ],   
-    Input('interval','n_intervals')
+    [Input('interval','n_intervals')]
 )
 def update(n):
 
@@ -64,11 +64,26 @@ def update(n):
     query  = {
         "timestamp":{
             "$gte": time_start
+            }
         }
-    }
 
-    r = col_temperature.find(query)
-    df = pd.DataFrame([v for v in r])
+    # r = col_temperature.find(query)
+
+    # client = MongoClient('mongodb://admin:IoTadmin%21@101.200.42.133:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false')
+    filter={}
+    sort=list({
+        'timestamp': -1
+    }.items())
+    limit=100
+
+    result = mongo_client['opc']['temperature'].find(
+        filter=filter,
+        sort=sort,
+        limit=limit
+        )
+
+
+    df = pd.DataFrame([v for v in result])
 
     print(df.shape)
     # limit to last 200 points
@@ -93,7 +108,6 @@ def update(n):
 
                         ))
 
-
     spec = 1088
 
     df_oos = df[df.pressure>=spec]
@@ -101,7 +115,8 @@ def update(n):
     columns = [ {"name":i,"id":i } for i in df_oos.columns]
     data = df_oos.to_dict('records')
 
-    return [fig,columns, data]
+    # return [fig, columns, data]
+    return [fig]
 
 if __name__ == '__main__':
 
