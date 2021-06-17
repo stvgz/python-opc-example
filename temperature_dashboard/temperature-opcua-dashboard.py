@@ -5,6 +5,8 @@ Dashbaord with dash
 from dash import Dash
 import dash_core_components as dcc
 from dash.dependencies import Input,Output
+from dash_core_components.Markdown import Markdown
+from dash_table import DataTable
 import dash_html_components as html
 import plotly.graph_objs as go
 import datetime
@@ -21,7 +23,13 @@ app.layout= html.Div(
             id = 'temperature'
         ),
 
-        dcc.Interval(id='interval',interval = 1000) # as mili seconds
+        dcc.Interval(id='interval',interval = 50*1000, n_intervals=0), # as mili seconds
+
+        dcc.Markdown('Table'),
+        DataTable(id = 'table',
+                    columns=[])
+
+
     ] 
 )
 
@@ -39,7 +47,11 @@ col_temperature = db['temperature']
 
 
 @app.callback(
-    Output('temperature','figure'),
+    [
+        Output('temperature','figure'),
+        Output('table','columns'),
+        Output('table','data')
+    ],   
     Input('interval','n_intervals')
 )
 def update(n):
@@ -58,6 +70,7 @@ def update(n):
     r = col_temperature.find(query)
     df = pd.DataFrame([v for v in r])
 
+    print(df.shape)
     # limit to last 200 points
     df=df.tail(100)
 
@@ -80,8 +93,18 @@ def update(n):
 
                         ))
 
-    return fig
+
+    spec = 1088
+
+    df_oos = df[df.pressure>=spec]
+
+    columns = [ {"name":i,"id":i } for i in df_oos.columns]
+    data = df_oos.to_dict('records')
+
+    return [fig,columns, data]
 
 if __name__ == '__main__':
 
-    app.run_server(port = 8003)
+    # app.run_server(port = 8003,debug=True)
+    # app.run_server(debug=True)
+    app.run_server()
