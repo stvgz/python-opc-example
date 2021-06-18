@@ -145,7 +145,24 @@ Successfully added user: {
 
 ### Mongo DB的使用
 
+MongoDB的基本语法比如一个query
 
+
+filter={}
+sort=list({
+'timestamp': -1
+}.items())
+limit=100
+
+result = mongo_client['opc']['temperature'].find(
+filter=filter,
+sort=sort,
+limit=limit
+)
+
+
+
+使用MongoDB Compass进行管理
 
 ### 模型
 
@@ -163,4 +180,15 @@ Successfully added user: {
 1. 可以修改
 
 
-### 
+###  提醒服务
+
+Teams
+        Teams Channel 
+
+
+邮件
+        smtp 服务
+
+微信
+        server酱
+        WxPusher
