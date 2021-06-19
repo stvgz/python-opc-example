@@ -180,6 +180,17 @@ limit=limit
 1. 可以修改
 
 
+---
+
+### 前端可视化 Dash
+
+非常少量的纯python代码构建的可视化内容
+
+> cd temperature_dashboard
+> python temeprature-opcua-dashboard.py
+
+
+
 ###  提醒服务
 
 Teams
