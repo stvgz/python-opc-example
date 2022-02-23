@@ -1,5 +1,7 @@
 # Python OPCua
 
+使用python发送、读取opc的方法
+
 ## 关于OPC UA
 
 OPC UA是一种协议 
